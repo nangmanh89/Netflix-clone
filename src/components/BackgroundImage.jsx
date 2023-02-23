@@ -1,5 +1,5 @@
 import React from "react";
-import Background from "../assets/login.jpg";
+import Background from "../assets/VN-en-20230220-popsignuptwoweeks-perspective_alpha_website_large.jpg";
 import styled from "styled-components";
 
 export default function BackgroundImage() {
