@@ -1,24 +1,26 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import BackgroundImage from '../components/BackgroundImage';
 import Header from '../components/Header';
 
 function Signup() {
+    const [showPassword, setShowPassword] = useState(false);
+
     return (
-        <Container>
+        <Container showPassword={showPassword}>
             <BackgroundImage />
             <div className="content">
                 <Header login />
                 <div className="body flex column a-center j-center">
                     <div className="text flex column">
-                        <h1>Unlimited movies, TV shows and more</h1>
+                        <h1>Manh chanel, TV shows and more</h1>
                         <h4>Watch any where. Cancel anytime</h4>
                         <h6>Ready to watch? Enter your email to create or restart membership</h6>
                     </div>
                     <div className="form">
                         <input type="email" placeholder="Email Address" name="email" />
-                        <input type="password" placeholder="Password" name="password" />
-                        <button>Get Started</button>
+                        {showPassword && <input type="password" placeholder="Password" name="password" />}
+                        {!showPassword && <button onClick={() => setShowPassword(true)}>Get Started</button>}
                     </div>
                     <button>Log In</button>
                 </div>
@@ -52,7 +54,7 @@ const Container = styled.div`
             .form {
                 display: grid;
                 align-items: center;
-                /* grid-template-columns: ; */
+                grid-template-columns: ${({ showPassword }) => (showPassword ? '1fr 1fr' : '2fr 1fr')};
                 width: 60%;
                 input {
                     color: black;
@@ -69,9 +71,9 @@ const Container = styled.div`
                     border: none;
                     cursor: pointer;
                     color: white;
-                    border-radius: 0.2rem;
                     font-weight: bolder;
                     font-size: 1.05rem;
+                    height: 100%;
                 }
             }
             button {
