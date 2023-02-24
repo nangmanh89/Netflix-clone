@@ -1,10 +1,33 @@
+import { createUserWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+import { firebaseAuth } from '../utils/firebase-config';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import BackgroundImage from '../components/BackgroundImage';
 import Header from '../components/Header';
+import { useNavigate } from 'react-router-dom';
 
 function Signup() {
     const [showPassword, setShowPassword] = useState(false);
+    const navigate = useNavigate();
+    const [formValues, setFormValues] = useState({
+        email: '',
+        password: '',
+    });
+
+    // Create User with firebaseAuth
+    const handleSigIn = async () => {
+        try {
+            const { email, password } = formValues;
+            await createUserWithEmailAndPassword(firebaseAuth, email, password);
+        } catch (err) {
+            console.log(err);
+        }
+    };
+
+    // If logged will move to Homepage
+    onAuthStateChanged(firebaseAuth, (currentUser) => {
+        if (currentUser) navigate('/');
+    });
 
     return (
         <Container showPassword={showPassword}>
@@ -13,16 +36,40 @@ function Signup() {
                 <Header login />
                 <div className="body flex column a-center j-center">
                     <div className="text flex column">
-                        <h1>Manh chanel, TV shows and more</h1>
+                        <h1>Unlimited movies, TV shows and more</h1>
                         <h4>Watch any where. Cancel anytime</h4>
                         <h6>Ready to watch? Enter your email to create or restart membership</h6>
                     </div>
                     <div className="form">
-                        <input type="email" placeholder="Email Address" name="email" />
-                        {showPassword && <input type="password" placeholder="Password" name="password" />}
+                        <input
+                            type="email"
+                            placeholder="Email Address"
+                            name="email"
+                            value={formValues.email}
+                            onChange={(e) =>
+                                setFormValues({
+                                    ...formValues,
+                                    [e.target.name]: e.target.value,
+                                })
+                            }
+                        />
+                        {showPassword && (
+                            <input
+                                type="password"
+                                placeholder="Password"
+                                name="password"
+                                value={formValues.password}
+                                onChange={(e) =>
+                                    setFormValues({
+                                        ...formValues,
+                                        [e.target.name]: e.target.value,
+                                    })
+                                }
+                            />
+                        )}
                         {!showPassword && <button onClick={() => setShowPassword(true)}>Get Started</button>}
                     </div>
-                    <button>Log In</button>
+                    <button onClick={handleSigIn}>Sig Up</button>
                 </div>
             </div>
         </Container>
